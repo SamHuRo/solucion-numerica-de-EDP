@@ -182,24 +182,24 @@ def matrix_factorization_nxn(
 # In[ ]:
 
 
-def tridiagonal_matrix(a, c, d):
+def tridiagonal_matrix(diagonal, diagonal_superior, diagonal_inferior):
     """
     Construye una matriz tridiagonal a partir de tres vectores:
-    a -> diagonal principal
-    c -> diagonal superior
-    d -> diagonal inferior
+    diagonal -> diagonal principal
+    diagonal_superior -> diagonal superior
+    diagonal_inferior -> diagonal inferior
     """
-    n = len(a)
+    n = len(diagonal)
     M = np.zeros((n, n))
 
     # Diagonal principal
-    np.fill_diagonal(M, a)
+    np.fill_diagonal(M, diagonal)
 
     # Diagonal superior
-    np.fill_diagonal(M[:-1, 1:], c)
+    np.fill_diagonal(M[:-1, 1:], diagonal_superior)
 
     # Diagonal inferior
-    np.fill_diagonal(M[1:, :-1], d)
+    np.fill_diagonal(M[1:, :-1], diagonal_inferior)
 
     return M
 
