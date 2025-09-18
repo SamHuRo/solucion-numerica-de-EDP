@@ -2,27 +2,27 @@
 # coding: utf-8
 
 # ---
-# 
+#
 # <center>
-# 
+#
 # # **Factorización de de una matriz y algoritmo de sustitución progresiva y regresiva**
-# 
+#
 # **Made by:**
-# 
+#
 # Samuel Huertas Rojas
-# 
+#
 # </center>
-# 
+#
 # ---
 
 # A continuación, se va a desarrollar el algoritmo utilizado para obtener la factorización de una matriz y los respectivos algoritmos de sustitución progresiva y regresiva. Los cuales se utilizan para resolver ecuaciones del tipo:  <br>
 # <center>
-# 
+#
 # $
 # A x = b
 # $
-# 
-# 
+#
+#
 # $A = \begin{bmatrix}
 # a_{11} & a_{12} & 0      & 0      & 0      \\
 # a_{21} & a_{22} & a_{23} & 0      & 0      \\
@@ -35,26 +35,26 @@
 # x_2 \\
 # x_3 \\
 # x_4 \\
-# x_5 
+# x_5
 # \end{bmatrix}, \quad
 # b = \begin{bmatrix}
 # b_1 \\
 # b_2 \\
 # b_3 \\
 # b_4 \\
-# b_5 
+# b_5
 # \end{bmatrix}$
-# 
+#
 # </center>
-# 
+#
 # La factoruzación se realiza: $A = LU$ <br>
-# 
+#
 # <center>
-# 
+#
 # $
 # A = LU
 # $
-# 
+#
 # $A = \begin{bmatrix}
 # a_{11} & a_{12} & 0      & 0      & 0      \\
 # a_{21} & a_{22} & a_{23} & 0      & 0      \\
@@ -76,13 +76,13 @@
 # 0      & 0      & 0      & 1      & u_{45} \\
 # 0      & 0      & 0      & 0      & 1      \\
 # \end{bmatrix}$
-# 
+#
 # </center>
-# 
+#
 # Para no terner que guardar las matrices $A,L,U$ de forma para ahorrar almacenamiento se van a guardar sus componentes en vectores: <br>
-# 
+#
 # <center>
-# 
+#
 # $
 # \begin{bmatrix}
 # a_{1}  & c_{1}  & 0      & 0      & 0      \\
@@ -96,7 +96,7 @@
 # 0      & p_{2}  & l_{3}  & 0      & 0      \\
 # 0      & 0      & p_{3}  & l_{4}  & 0      \\
 # 0      & 0      & 0      & p_{4}  & l_{5} \\
-# \end{bmatrix} 
+# \end{bmatrix}
 # \begin{bmatrix}
 # 1      & u_{1} & 0      & 0      & 0      \\
 # 0      & 1      & u_{2} & 0      & 0      \\
@@ -105,7 +105,7 @@
 # 0      & 0      & 0      & 0      & 1      \\
 # \end{bmatrix}
 # $
-# 
+#
 # </center>
 
 # In[1]:
@@ -116,7 +116,7 @@ import numpy as np
 
 # ## Factorización de mariz
 
-# 
+#
 # $
 # \begin{array}{|c|c|c|c|}
 # \hline
@@ -141,20 +141,20 @@ import numpy as np
 
 
 def matrix_factorization_nxn(
-    a: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal)
-    c: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal superior)
-    d: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal inferior)
+    diagonal: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal)
+    diagonal_superior: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal superior)
+    diagonal_inferior: np.array,  # Vector que contiene los coeficientes de la matriz (diagonal inferior)
 ):
     """
     Función para realizar la factorización de una matriz tridiagonal A = L*U
     donde L es una matriz triangular inferior con 1's en la diagonal principal y
     U es una matriz triangular superior.
     Parámetros:
-    a : np.array
+    diagonal : np.array
         Vector que contiene los coeficientes de la matriz (diagonal)
-    c : np.array
+    diagonal_superior : np.array
         Vector que contiene los coeficientes de la matriz (diagonal superior)
-    d : np.array
+    diagonal_inferior : np.array
         Vector que contiene los coeficientes de la matriz (diagonal inferior)
     Retorna:
     l : np.array
@@ -164,15 +164,15 @@ def matrix_factorization_nxn(
     u : np.array
         Vector que contiene los coeficientes de la matriz U (diagonal)
     """
-    l_dig = np.zeros(len(a))
-    p = np.zeros(len(d))
-    u = np.zeros(len(c))
+    l_dig = np.zeros(len(diagonal))
+    p = np.zeros(len(diagonal_inferior))
+    u = np.zeros(len(diagonal_superior))
 
-    l_dig[0] = a[0]
-    p = d.copy()
-    for i in range(0, len(c)):
-        u[i] = c[i] / l_dig[i]
-        l_dig[i + 1] = a[i + 1] - p[i] * u[i]
+    l_dig[0] = diagonal[0]
+    p = diagonal_inferior.copy()
+    for i in range(0, len(diagonal_superior) - 1):
+        u[i] = diagonal_superior[i] / l_dig[i]
+        l_dig[i + 1] = diagonal[i + 1] - p[i] * u[i]
 
     return l_dig, p, u
 
@@ -297,4 +297,3 @@ def susPro_vector(
         z[i] = (b[i] - p[i - 1] * z[i - 1]) / l_dig[i]
 
     return z
-
