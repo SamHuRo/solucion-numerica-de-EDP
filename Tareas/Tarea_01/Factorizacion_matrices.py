@@ -292,8 +292,10 @@ def susPro_vector(
     b: np.array,  # Vector que contiene los términos independientes
 ):
     z = np.zeros(len(b))
-    z[0] = b[0] / l_dig[0]
+    z[0] = b[0] / l_dig[0] if l_dig[0] != 0 else 0.0
+    
     for i in range(1, len(b)):
-        z[i] = (b[i] - p[i - 1] * z[i - 1]) / l_dig[i]
-
+        numerador = b[i] - p[i - 1] * z[i - 1]
+        z[i] = np.where(l_dig[i] != 0, numerador / l_dig[i], 0.0)
+    
     return z
